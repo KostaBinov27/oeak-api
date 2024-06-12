@@ -1,0 +1,41 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+ .dt-button:hover{
+    color: #fff !important;
+    background: #ef3340 !important;
+    border: 1px solid #ef3340 !important;
+ }
+ .dt-button{
+    color: #ef3340 !important;
+    background: transparent !important;
+    border: 1px solid #ef3340 !important;
+ }
+
+ th.dt-orderable-asc.dt-orderable-desc {
+    background: #F7F7F7 !important;
+}
+
+table.dataTable.display>tbody>tr:nth-child(odd)>* {
+    box-shadow: none !important;
+}
+
+table.dataTable.display>tbody>tr:nth-child(odd)>* {
+    box-shadow: none !important;
+}
+
+.dt-search{
+    float: right;
+}
+
+
+#dataTable_wrapper td{
+    border: 0 !important;
+    border-bottom: 1px solid #dcdcdc !important;
+}
+#dataTable_wrapper {
+    width: fit-content;
+    margin: auto;
+}
