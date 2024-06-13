@@ -301,6 +301,7 @@
 				data: data_to_send,
 				success: function (response) {
 					var data = JSON.parse(response);
+			
 					// Custom comparator function for sorting by month and year
 					function sortByMonthAndYearDesc(a, b) {
 						if (a.year === b.year) {
@@ -308,10 +309,10 @@
 						}
 						return b.year - a.year;
 					}
-
-					// Sort the data array
+			
+					// Sort the data array by month and year
 					data.sort(sortByMonthAndYearDesc);
-
+			
 					// Group entries by month and year
 					let groupedData = {};
 					data.forEach(entry => {
@@ -321,14 +322,19 @@
 						}
 						groupedData[key].push(entry);
 					});
-
+			
 					// Sort companies within each group alphabetically
 					for (let key in groupedData) {
 						groupedData[key].sort((a, b) => a.company_name.localeCompare(b.company_name));
 					}
-
-					// Concatenate groups into the final array
-					let sortedData = Object.values(groupedData).flat();
+			
+					// Concatenate groups into the final sorted array
+					let sortedData = [];
+					for (let key in groupedData) {
+						sortedData = sortedData.concat(groupedData[key]);
+					}
+			
+					// Initialize DataTable with sorted data
 					$('#dataTable').DataTable({
 						data: sortedData,
 						columns: [
@@ -338,8 +344,7 @@
 								data: null,
 								render: function (data, type, row) {
 									if (type === 'display') {
-										var dateString = row.month + '/' + row.year;
-										return dateString;
+										return row.month + '/' + row.year;
 									}
 									return data;
 								}
@@ -403,7 +408,9 @@
 				complete: function () {
 					// This code runs regardless of success or error
 				},
-			});		
+			});
+			
+					
 		}
 	});
 })(jQuery);
