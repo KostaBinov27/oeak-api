@@ -86,7 +86,7 @@
                 <th>Datum</th>
                 <th>Anzhal Newsletter</th>
                 <th>ø Versand pro Mailing</th>
-                <th>Average Öffnungen absolut</th>
+                <th>ø Öffnungen absolut</th>
                 <th>% Öffnungsrate</th>
             </tr>
         </thead>
