@@ -282,6 +282,7 @@
 		} else if (platform_input == 'newsletter') {
 			var data_to_send = {
 				platform: platform_input,
+				month: $('#month').val(),
 				action: "get_oeak_data",
 			};
 
@@ -333,7 +334,6 @@
 					for (let key in groupedData) {
 						sortedData = sortedData.concat(groupedData[key]);
 					}
-			
 					// Initialize DataTable with sorted data
 					$('#dataTable').DataTable({
 						data: sortedData,
@@ -359,10 +359,12 @@
 								}
 							},
 							{
-								data: "newsletter_dispatch_per_mailing",
+								data: "average_newsletters_per_mailing",
 								render: function (data, type, row) {
 									if (type === 'display') {
-										return parseFloat(data).toLocaleString('de-DE');
+										let roundedNumber = Math.ceil(parseFloat(data));
+										let formattedNumber = roundedNumber.toLocaleString('de-DE');
+										return formattedNumber;
 									}
 									return data;
 								}
