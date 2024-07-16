@@ -156,7 +156,8 @@ class Oeak_Dashbaord_Api {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'custom_admin_menu' );
 	}
 
 	/**
@@ -180,7 +181,11 @@ class Oeak_Dashbaord_Api {
 
 		function get_oeak_data() {
 			// Retrieve variables sent via AJAX
-			$year = $_POST['year'];
+			if ($_POST['year']){
+				$year = $_POST['year'];
+			} else {
+				$year = '';
+			}
 			$month = $_POST['month'];
 			$platform = $_POST['platform'];
 			$param = array(
@@ -204,7 +209,6 @@ class Oeak_Dashbaord_Api {
 			wp_die();
 		}
 	}
-
 	
 
 	/**

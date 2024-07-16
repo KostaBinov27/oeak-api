@@ -20,7 +20,8 @@
  * @subpackage Oeak_Dashbaord_Api/public
  * @author     Kosta <kostabinovps@gmail.com>
  */
-class Oeak_Dashbaord_Api_Public {
+class Oeak_Dashbaord_Api_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Oeak_Dashbaord_Api_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Oeak_Dashbaord_Api_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,9 +75,8 @@ class Oeak_Dashbaord_Api_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( 'datatables-css', plugin_dir_url( __FILE__ ) . 'css/datatables.min.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/oeak-dashbaord-api-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style('datatables-css', plugin_dir_url(__FILE__) . 'css/datatables.min.css', array(), $this->version, 'all');
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/oeak-dashbaord-api-public.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -83,7 +84,8 @@ class Oeak_Dashbaord_Api_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -97,23 +99,48 @@ class Oeak_Dashbaord_Api_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'datatables-js', plugin_dir_url( __FILE__ ) . 'js/datatables.min.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'alphabetNumeric-js', 'https://cdn.datatables.net/plug-ins/1.10.25/sorting/alphabetNumeric.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/oeak-dashbaord-api-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script('datatables-js', plugin_dir_url(__FILE__) . 'js/datatables.min.js', array('jquery'), $this->version, false);
+		wp_enqueue_script('alphabetNumeric-js', 'https://cdn.datatables.net/plug-ins/1.10.25/sorting/alphabetNumeric.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/oeak-dashbaord-api-public.js', array('jquery'), $this->version, false);
 		wp_localize_script($this->plugin_name, 'ajax_object', array('ajax_url' => admin_url('admin-ajax.php')));
 	}
 
 
-	public function oeak_dashboard_data($atts) {
+	public function oeak_dashboard_data($atts)
+	{
+
+		// Get the stored dates from the options table
+		$podcast_date = get_option('podcast_date', '');
+		$newsletter_date = get_option('newsletter_date', '');
+
+		// Split the podcast date into month and year
+		if ($podcast_date) {
+			list($podcast_month, $podcast_year) = explode('-', $podcast_date);
+			$podcast_month = (int) $podcast_month; // Convert to integer to remove leading zero
+		} else {
+			$podcast_year = '';
+			$podcast_month = '';
+		}
+
+		// Split the newsletter date into month and year
+		if ($newsletter_date) {
+			list($newsletter_month, $newsletter_year) = explode('-', $newsletter_date);
+			$newsletter_month = (int) $newsletter_month; // Convert to integer to remove leading zero
+		} else {
+			$newsletter_year = '';
+			$newsletter_month = '';
+		}
+		
 		$atts = shortcode_atts(array(
-			'year' => '',
-			'month' => '',
+			'year' => $podcast_year,
+			'month' => $podcast_month,
 			'platform' => '',
 		), $atts, 'oeak_dashboard_data');
-	
-		ob_start();
-		require plugin_dir_path( __FILE__ ) . "partials/oeak-dashbaord-api-public-display.php";
-		$return_string = ob_get_flush();
-	}
 
+
+		ob_start();
+		require plugin_dir_path(__FILE__) . "partials/oeak-dashbaord-api-public-display.php";
+		$return_string = ob_get_clean();
+		return $return_string;
+	}
 }
