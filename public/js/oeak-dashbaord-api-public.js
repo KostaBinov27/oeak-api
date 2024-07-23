@@ -154,6 +154,24 @@
 								pageSize: 'A4', // Optional: Set the page size to A4
 								exportOptions: {
 									columns: ':visible' // Export only visible columns
+								},
+								customize: function (doc) {
+									doc['footer'] = (function (currentPage, pageCount) {
+										return {
+											columns: [
+												{
+													alignment: 'center',
+													text: [
+														'Seite ',
+														{ text: currentPage.toString(), italics: true },
+														' von ',
+														{ text: pageCount.toString(), italics: true }
+													]
+												}
+											],
+											margin: [0, 0]
+										};
+									});
 								}
 							}
 						]
@@ -305,6 +323,24 @@
 									pageSize: 'A4', // Optional: Set the page size to A4
 									exportOptions: {
 										columns: ':visible' // Export only visible columns
+									},
+									customize: function (doc) {
+										doc['footer'] = (function (currentPage, pageCount) {
+											return {
+												columns: [
+													{
+														alignment: 'center',
+														text: [
+															'Seite ',
+															{ text: currentPage.toString(), italics: true },
+															' von ',
+															{ text: pageCount.toString(), italics: true }
+														]
+													}
+												],
+												margin: [0, 0]
+											};
+										});
 									}
 								}
 							]
@@ -338,7 +374,7 @@
 					},
 				});
 			});
-			
+
 		} else if (platform_input == 'newsletter') {
 			var data_to_send = {
 				platform: platform_input,
@@ -435,6 +471,7 @@
 					});
 			
 					// Initialize DataTable with sorted data
+					console.log('kosta');
 					var table = $('#dataTable').DataTable({
 						data: sortedData,
 						columns: [
@@ -537,6 +574,22 @@
 											row[6].alignment = 'center'; // 3rd column index is 2 (0-based)
 										}
 									});
+									doc['footer'] = (function (currentPage, pageCount) {
+										return {
+											columns: [
+												{
+													alignment: 'center',
+													text: [
+														'Seite ',
+														{ text: currentPage.toString(), italics: true },
+														' von ',
+														{ text: pageCount.toString(), italics: true }
+													]
+												}
+											],
+											margin: [0, 0]
+										};
+									});
 								}
 							}
 						]
@@ -558,13 +611,157 @@
 				complete: function () {
 					// This code runs regardless of success or error
 				},
-			});
-			
-			
+			});			
+		} else if (platform_input == 'testValue') {
+			$.ajax({
+				url: ajax_object.ajax_url, // URL to admin-ajax.php
+				type: 'POST',
+				data: data_to_send,
+				success: function (response) {
+					$('#dataTable').DataTable({
+						data: JSON.parse(response),
+						columns: [
+							{
+								data: "logo",
+								render: function (data, type, row) {
+									// If type is 'display', render the logo as an image
+									if (type === 'display') {
+										return '<img src="https://previewdash.oeak.at/storage/logos/' + data + '" alt="Logo" style="width: 50px; height: auto;">';
+									}
+									return data;
+								}
+							},
+							{ data: "podcast_name" },
+							{ data: "company_name" },
+							{ data: "podcast_category" },
+							{
+								data: "podcast_downloads_current_month",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return parseFloat(data).toLocaleString('de-DE'); // German locale for European formatting
+									}
+									return data;
+								}
+							},
+							{
+								data: "podcast_downloads_previous_month",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return parseFloat(data).toLocaleString('de-DE'); // German locale for European formatting
+									}
+									return data;
+								}
+							},
+							{ data: "davon_at" },
+							{
+								data: "podcast_downloads_percentage_increase",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return data + '%';
+									}
+									return data;
+								}
+							},
+							{
+								data: "podcast_active_episodes_current_month",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return parseFloat(data).toLocaleString('de-DE'); // German locale for European formatting
+									}
+									return data;
+								}
+							},
+							{
+								data: "podcast_active_episodes_previous_month",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return parseFloat(data).toLocaleString('de-DE'); // German locale for European formatting
+									}
+									return data;
+								}
+							},
+							{
+								data: "podcast_published_episodes_current_month",
+								render: function (data, type, row) {
+									if (type === 'display') {
+										return parseFloat(data).toLocaleString('de-DE'); // German locale for European formatting
+									}
+									return data;
+								}
+							},
+							{ data: "podcast_rank_current_month" }
+						],
+						// Sort by podcast_rank_current_month column by default
+						order: [[10, 'asc']],
+						paging: false, // Disable pagination
+						dom: 'Bfrtip', // Add this to include buttons
+						buttons: [
+							{
+								extend: 'excelHtml5',
+								text: 'Export to Excel',
+								customize: function (xlsx) {
+									var sheet = xlsx.xl.worksheets['sheet1.xml'];
+					
+									// Define which columns to adjust (D, E, F => 3, 4, 5 in 0-based index)
+									var columnsToAdjust = [3, 4, 6, 7, 8];
+					
+									// Loop through each row in the sheet
+									$('row', sheet).each(function () {
+										var cells = $(this).find('c');
+					
+										// Loop through each cell in the row
+										cells.each(function (index) {
+											if (columnsToAdjust.includes(index)) {
+												// console.log(index);
+												$(this).find('v').text($(this).find('v').text().replace(/[,.]/g, ''));
+												$(this).find('t').text($(this).find('t').text().replace(/[,.]/g, ''));
+												$(this).attr('s', '52'); // Assuming '52' is the right alignment style index
 
-			
-			
-			
+											}
+										});
+									});
+								},
+								exportOptions: {
+									columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Specify all columns for export
+								}
+							},
+							{
+								extend: 'pdfHtml5',
+								orientation: 'landscape', // Export the PDF in landscape mode
+								pageSize: 'A4', // Optional: Set the page size to A4
+								exportOptions: {
+									columns: ':visible' // Export only visible columns
+								},
+								customize: function (doc) {
+									doc['footer'] = (function (currentPage, pageCount) {
+										return {
+											columns: [
+												{
+													alignment: 'center',
+													text: [
+														'Seite ',
+														{ text: currentPage.toString(), italics: true },
+														' von ',
+														{ text: pageCount.toString(), italics: true }
+													]
+												}
+											],
+											margin: [0, 0]
+										};
+									});
+								}
+							}
+						]
+					});
+				},
+				error: function (xhr, status, error) {
+					// Handle errors here
+					console.error("Network response was not ok:", error);
+				},
+				complete: function () {
+					// This code runs regardless of success or error
+				},
+			});
 		}
 	});
 })(jQuery);

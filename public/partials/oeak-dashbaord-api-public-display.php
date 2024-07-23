@@ -103,4 +103,30 @@
             </tr>
         </thead>
     </table>
+<?php } else if ($atts['platform'] == 'testValue') { ?>
+    <style>
+        @media only screen and (min-width: 1240px) {
+            .section_wrapper {
+                max-width: 1450px !important;
+            }
+        }
+    </style>
+    <table id="dataTable" class="dataTableClass display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Logo</th>
+                <th>Podcast Name</th>
+                <th>Publisher/Marke</th>
+                <th>Kategorie</th>
+                <th>Valide Downloads <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
+                <th>Valide Downloads <span class="lastmonth"><?php echo $atts['month'] - 1; ?></span>/<span class="currnetyearlastmonth"><?php echo $atts['year']; ?></span></th>
+                <th>Davon AT</th>
+                <th>Veränderung in % zum Vormonat</th>
+                <th>Aktive Episoden <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
+                <th>Aktive Episoden <span class="lastmonth"><?php echo $atts['month'] - 1; ?></span>/<span class="currnetyearlastmonth"><?php echo $atts['year']; ?></span></th>
+                <th>Veröffentlichte Episoden <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
+                <th>Rang</th>
+            </tr>
+        </thead>
+    </table>
 <?php } ?>

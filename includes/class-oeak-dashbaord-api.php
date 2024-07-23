@@ -188,6 +188,9 @@ class Oeak_Dashbaord_Api {
 			}
 			$month = $_POST['month'];
 			$platform = $_POST['platform'];
+			if ($platform == 'testValue'){
+				$platform = 'podcast';
+			}
 			$param = array(
 				'month' => $month,
 				'year' => $year,
