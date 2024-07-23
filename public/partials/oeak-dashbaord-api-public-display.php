@@ -120,7 +120,7 @@
                 <th>Kategorie</th>
                 <th>Valide Downloads <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
                 <th>Valide Downloads <span class="lastmonth"><?php echo $atts['month'] - 1; ?></span>/<span class="currnetyearlastmonth"><?php echo $atts['year']; ?></span></th>
-                <th>Davon AT</th>
+                <th>davon AT Anteil <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
                 <th>Veränderung in % zum Vormonat</th>
                 <th>Aktive Episoden <span class="currnetmonth"><?php echo $atts['month']; ?></span>/<span class="currnetyear"><?php echo $atts['year']; ?></span></th>
                 <th>Aktive Episoden <span class="lastmonth"><?php echo $atts['month'] - 1; ?></span>/<span class="currnetyearlastmonth"><?php echo $atts['year']; ?></span></th>

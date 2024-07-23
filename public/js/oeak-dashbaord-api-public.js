@@ -692,7 +692,7 @@
 							{ data: "podcast_rank_current_month" }
 						],
 						// Sort by podcast_rank_current_month column by default
-						order: [[10, 'asc']],
+						order: [[11, 'asc']],
 						paging: false, // Disable pagination
 						dom: 'Bfrtip', // Add this to include buttons
 						buttons: [
@@ -722,7 +722,7 @@
 									});
 								},
 								exportOptions: {
-									columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] // Specify all columns for export
+									columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] // Specify all columns for export
 								}
 							},
 							{
